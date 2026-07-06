@@ -240,6 +240,750 @@ git init my-project 可以直接创建并初始化 my-project 这个目录。这
 layout: section
 ---
 
+# `git status`
+
+Local Git · 02
+
+<!--
+git init 只是打开了开关，接下来这个命令才是整节课最重要的观察工具。以后每做
+一步操作，前后都可以先跑一下它，看看 Git 眼里现在是什么情况——这个习惯值得
+从第一天就养成。
+-->
+
+---
+
+# 先看看现在是什么状态
+
+```bash
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+```
+
+</div>
+
+<!--
+git status 不会修改任何文件或 Git 历史，它只负责如实汇报当前状态。刚 git init
+完、什么文件都没有的时候，它会告诉你：在 main 分支上，还没有任何 commit，
+working tree 是干净的。
+-->
+
+---
+
+# 第一个核心状态：untracked
+
+```bash
+echo "hello git" > foobar.txt
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+Untracked files:
+	foobar.txt
+```
+
+</div>
+
+<div v-click class="mt-6 text-lg opacity-80">
+Git 不会自动追踪所有新文件——新文件要不要管，得自己明确告诉它
+</div>
+
+<!--
+untracked 的意思是：这个文件确实存在于 working directory 里，但 Git 还没有
+把它纳入版本管理。这一节先不用急着搞懂 staging area 的完整模型，记住这一件
+事就够。
+
+[click] 之后每个命令演示前后都尽量跑一下 git status——形成"不确定仓库现在是
+什么状态，就先 git status"的反射，比背下每个命令的细节更重要。
+-->
+
+---
+
+# 顺带认识
+
+```bash
+git status --short
+git status -s
+```
+
+<div v-click class="mt-4">
+
+```
+?? foobar.txt
+```
+
+</div>
+
+<div v-click class="mt-6 text-lg opacity-80">
+第一次学的时候，默认输出更容易看懂——这门课默认输出优先
+</div>
+
+<!--
+?? 就表示 untracked。--short/-s 适合熟悉命令之后快速扫一眼状态。
+
+[click] 下一步，我们要回答这个 untracked 状态该怎么处理——也就是 git add。
+-->
+
+---
+layout: section
+---
+
+# `git add`
+
+Local Git · 03
+
+<!--
+上一节 git status 告诉我们 foobar.txt 是个 untracked file。这一节回答那个
+自然的下一个问题：这个文件该怎么进入 Git 的管理范围？
+-->
+
+---
+
+# 把变化放进 staging area
+
+```bash
+git add foobar.txt
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+Changes to be committed:
+	new file:   foobar.txt
+```
+
+</div>
+
+<!--
+git add 的作用是把文件的当前变化放进 staging area（暂存区，也叫 index）——
+也就是"准备提交"的那个区域。对新文件来说，意味着让 Git 开始追踪它，并把此刻
+的内容放进下一次 commit 的候选集合里。git add 本身还不是保存历史，真正写进
+历史的是后面的 git commit。
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Staging Area / Index
+
+<div class="text-lg opacity-70 mt-4">↑ git add</div>
+
+# Working Directory / Working Tree
+
+<!--
+先建立一个简化版模型，完整的三层模型要等 git log 之后再总结。现在只需要理解：
+working directory 里可以同时存在很多变化，但你可以挑其中一部分放进 staging
+area，作为下一次 commit 的候选内容。
+-->
+
+---
+
+# 两个高频用法
+
+```bash
+git add foobar.txt
+git add .
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+git add . 方便，但用之前最好先 git status 确认一下
+</div>
+
+<!--
+git add foobar.txt 用于明确添加某一个文件；git add . 会把当前目录下所有的
+变化一次性加进去。git add -A 这类变体先不展开，重点是把 staging area 这个
+概念立住。
+
+[click] 下一步，staging area 里已经有内容了，是时候把它真正写进历史——也就
+是 git commit。
+-->
+
+---
+layout: section
+---
+
+# `git commit`
+
+Local Git · 04
+
+<!--
+staging area 里已经准备好了 foobar.txt。现在要做那件真正重要的事：把它写进
+Git 的历史。
+-->
+
+---
+
+# 写进历史
+
+```bash
+git commit -m "Add foobar file"
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+[main (root-commit) bc3a22a] Add foobar file
+ 1 file changed, 1 insertion(+)
+```
+
+</div>
+
+<!--
+git commit 才是真正创建历史记录的命令——git add 只是准备，commit 才是保存。
+一次 commit 可以理解为项目在某个时刻的一张快照，带着 message、作者、时间、
+commit hash。commit 默认只提交 staging area 里的内容，不会自动提交所有工作
+目录里的变化。
+-->
+
+---
+
+# 一句话记住 `-m`
+
+```bash
+git commit -m "message"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+不加 -m 会打开一个陌生的命令行编辑器——课堂上先一直用 -m
+</div>
+
+<!--
+不加 -m，Git 会打开默认编辑器（由 $GIT_EDITOR、$EDITOR 或 git config
+core.editor 决定）等你输入 message；具体怎么配置留到 git config 那一节。
+
+message 要说清楚这次改了什么，别写 update/fix/aaa 这种没有信息量的话；一次
+commit 尽量对应一个清晰的小改动。
+
+--amend 和 -a 先不展开，等更熟悉 commit hash、staging area 之后再解禁。
+
+[click] 下一步，我们已经有了第一次 commit，该看看 Git 是怎么记录这些历史
+的——也就是 git log。
+-->
+
+---
+layout: section
+---
+
+# `git log`
+
+Local Git · 05
+
+<!--
+现在已经有了一次 commit。是时候看看 Git 到底把历史记成了什么样。
+-->
+
+---
+
+# 查看历史
+
+```bash
+git log
+```
+
+<div v-click class="mt-4">
+
+```
+commit bc3a22a...
+Author: Course Instructor <instructor@example.com>
+Date:   Mon Jul 6 22:40:55 2026 +0800
+
+    Add foobar file
+```
+
+</div>
+
+<!--
+默认按时间倒序排列，最新的 commit 在最上面。重点看四样东西：commit hash、
+Author、Date、commit message。hash 先当成"版本号"理解就够，后面讲内部对象
+模型时再回来解释。如果 git log 打开分页界面卡住，按 q 退出。
+-->
+
+---
+
+# 制造第二次 commit，历史才有意义
+
+```bash
+echo "second line" >> foobar.txt
+git add foobar.txt
+git commit -m "Update foobar file"
+git log --oneline
+```
+
+<div v-click class="mt-4">
+
+```
+e9d380a Update foobar file
+bc3a22a Add foobar file
+```
+
+</div>
+
+<!--
+现在历史里有两条 commit，新的在上面，旧的在下面，各自带着自己的 hash 和
+message。--oneline 把每条 commit 压缩成一行，历史一多起来比默认输出好扫视
+得多。--graph --all --decorate 这类参数留到讲 branch 之后再用。
+-->
+
+---
+layout: section
+---
+
+# 阶段性总结
+
+Git 的三层模型
+
+<!--
+学完 init/status/add/commit/log 这一路下来，现在有足够的素材，可以正式把
+Git 在本地的三个核心区域串起来看了。
+-->
+
+---
+layout: image
+image: ./assets/diagrams/local-git/05-recap-three-layers.svg
+backgroundSize: contain
+---
+
+<!--
+Working Directory：当前真实可编辑的文件。Staging Area：准备进入下一次
+commit 的变化集合。Local Repository：已经通过 commit 保存下来的历史。
+git add 把变化从 working directory 挪进 staging area；git commit 把
+staging area 的内容保存进 local repository；反方向的 restore --staged 和
+checkout/reset 我们还没正式学，图上先放着，后面讲到时回头对照。
+-->
+
+---
+
+# 把命令和搬运对应起来
+
+<div class="text-lg leading-relaxed mt-4">
+foobar.txt 一开始 untracked，待在 working directory；<br/>
+git add 之后挪进 staging area；<br/>
+git commit 之后进了 local repository——两次 commit，两张快照。
+</div>
+
+<!--
+这套模型不需要死记成抽象定义，最好的办法是回头对着 foobar.txt 的例子过一遍，
+把命令和这三层之间的搬运对应起来，比背图本身更有用。
+
+下一步，我们接着看一个 git status 还没完全回答的问题：具体改了什么内容？
+这就是 git diff。
+-->
+
+---
+layout: section
+---
+
+# `git diff`
+
+Local Git · 06
+
+<!--
+git status 能告诉我们"哪些文件变了"，但它不会直接给你看"具体改了什么"。
+-->
+
+---
+
+# 看具体差异
+
+```bash
+echo "third line" >> foobar.txt
+git diff
+```
+
+<div v-click class="mt-4">
+
+```
+--- a/foobar.txt
++++ b/foobar.txt
+@@ -1,2 +1,3 @@
+ hello git
+ second line
++third line
+```
+
+</div>
+
+<!--
+git diff 默认显示的是 working directory 里尚未进入 staging area 的修改。
+- 开头的行表示删除或旧内容，+ 开头的行表示新增或新内容。不需要逐字解释
+diff header 里的每个字段，先能看懂哪几行变了就够。分页界面同样按 q 退出。
+-->
+
+---
+
+# staging 之后，diff 去哪了
+
+```bash
+git add foobar.txt
+git diff
+git diff --staged
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+git add 之后，working directory 和 staging area 已经一致——git diff 什么都不显示
+</div>
+
+<!--
+这是个关键观察：git add 之后默认 git diff 可能没有输出，因为工作目录和
+staging area 已经一致；但 git diff --staged 会显示 staging area 里准备
+提交的变化，这次才是我们真正想看的那段 diff。git diff --cached 和
+--staged 基本等价，课堂上统一用 --staged。
+
+[click] 下一步，如果发现改错了想撤销，该怎么办？这就是 git restore。
+-->
+
+---
+layout: section
+---
+
+# `git restore`
+
+Local Git · 07
+
+<!--
+刚才用 git diff 看到了修改。接下来要回答一个很实际的问题：如果发现改错了，
+怎么撤销？这一节先只讲两个最高频的场景。
+-->
+
+---
+
+# 取消 staged，但修改还在
+
+```bash
+git restore --staged foobar.txt
+git diff
+```
+
+<div v-click class="mt-4">
+
+```
++third line
+```
+
+</div>
+
+<!--
+git restore --staged foobar.txt 把文件从 staging area 拿出来，不会删除文件
+内容，修改还留在 working directory 里——执行完再看 git diff，仍然能看到
+third line。对应三层模型里 staging area 退回 working directory 这条路。
+-->
+
+---
+
+# 丢掉工作目录里的修改
+
+```bash
+git restore foobar.txt
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+nothing to commit, working tree clean
+```
+
+</div>
+
+<!--
+这次是真的丢了——third line 不见了。这会丢掉尚未 commit 的本地修改，需要
+谨慎使用，执行前最好先 git status / git diff 确认。一定要区分：
+restore --staged 是取消 staging，修改还在；restore <file> 是丢掉工作目录
+修改，内容真的没了。git restore . 会一次性丢掉所有尚未 staged 的修改，
+更方便也更危险。
+
+[click] 下一步，我们要学一个和"撤销"关系更密切、但也更容易用错的命令——
+git reset。
+-->
+
+---
+layout: section
+---
+
+# `git reset`
+
+Local Git · 08
+
+<!--
+git reset 比前面几个命令更容易用错，这一节只围绕"撤销最近一次本地 commit"
+这一个场景展开。HEAD 表示当前所在的 commit，HEAD~1 就是上一个。
+-->
+
+---
+
+# `--soft`：退指针，修改留在 staging area
+
+```bash
+git commit -m "Bad experiment"
+git reset --soft HEAD~1
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+Changes to be committed:
+	modified:   foobar.txt
+```
+
+</div>
+
+<!--
+git reset --soft HEAD~1 把当前分支退回到上一个 commit——"Bad experiment"
+那条确实不见了，但那次 commit 里的修改没有丢，留在 staging area。适合用在
+刚 commit 完发现 message 写错了，但修改本身还要留着。
+-->
+
+---
+
+# `--mixed`（默认）：退指针，修改回到工作目录
+
+```bash
+git commit -m "Bad experiment"
+git reset HEAD~1
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+Changes not staged for commit:
+	modified:   foobar.txt
+```
+
+</div>
+
+<!--
+git reset HEAD~1 等价于 --mixed HEAD~1，是默认模式。同样撤销最近一次
+commit，但这次修改回到的是 working directory，不在 staging area 里了。
+适合用在：撤销 commit，并且想重新决定这次到底要不要 add。reset 更适合
+移动"当前 commit 指针"的位置；restore 更适合文件级别的撤销。reset 会直接
+影响历史指针，适合处理还没有 push 给别人的本地 commit。
+-->
+
+---
+
+# `--hard`：退指针，工作目录也一并清空
+
+```bash
+git reset --hard HEAD~1
+cat foobar.txt
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+staging area 和 working directory 里的相关修改都被一并丢弃，基本找不回来
+</div>
+
+<!--
+三种模式一句话总结：--soft 只退指针，修改留在 staging area；--mixed（默认）
+退指针并把修改退回 working directory；--hard 退指针，同时把 staging area
+和 working directory 里的相关修改都清空——这是唯一会直接改动 working
+directory 内容的模式，执行前一定要确认没有不想丢的修改。
+
+[click] 下一步，我们要处理一类"根本不该进 Git"的文件——用 .gitignore 告诉
+Git 该忽略什么。
+-->
+
+---
+layout: section
+---
+
+# `.gitignore`
+
+Local Git · 09
+
+<!--
+这一节的主角不是命令，而是一个特殊文件。它的作用是告诉 Git：哪些文件不需要
+出现在 git status 里，也不应该被提交进仓库。
+-->
+
+---
+
+# 有些文件根本不该提交
+
+```bash
+echo "SECRET_KEY=dev-secret" > .env
+git status
+```
+
+<div v-click class="mt-4">
+
+```
+Untracked files:
+	.env
+	debug.log
+```
+
+</div>
+
+<!--
+debug.log 通常是程序运行时产生的日志，不该进版本历史；.env 里往往放着本地
+配置、密钥、token 之类的东西，更不该提交。
+-->
+
+---
+
+# 用 `.gitignore` 解决
+
+```bash
+echo "*.log" > .gitignore
+echo ".env" >> .gitignore
+git status
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+debug.log 和 .env 这次都不见了——被忽略的 untracked files 默认不出现在 git status 里
+</div>
+
+<!--
+.gitignore 里的规则会影响 Git 怎么看待 untracked files。它本身应该提交进
+仓库，因为是团队共享的规则。git status --ignored 可以专门查看被忽略的文件，
+适合排查"为什么 Git 看不到这个文件"。
+-->
+
+---
+
+# 一个常见误区
+
+<div class="text-xl leading-relaxed mt-4">
+.gitignore 只影响还没有被 Git 追踪的文件
+</div>
+
+<div v-click class="text-lg opacity-80 mt-6">
+文件已经 commit 过？光改 .gitignore 不够，还需要 <code>git rm --cached</code>
+</div>
+
+<!--
+如果一个文件已经 commit 进仓库了，后来才把它写进 .gitignore，Git 仍然会
+继续追踪它的变化。
+
+[click] git add -A 会把整个仓库里的新增、修改、删除都一并纳入 staging
+area，包括用 rm 删除、但还没告诉 Git 的文件——这个先演示效果，不需要真的
+提交。
+-->
+
+---
+
+# `git rm --cached`
+
+```bash
+git rm --cached local-only.txt
+git add .gitignore
+git commit -m "Stop tracking local-only file"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+从追踪里移除，但保留本地磁盘上的文件内容
+</div>
+
+<!--
+对比普通的 git rm：那个会连本地文件一起删掉，--cached 只解除追踪，文件还在。
+需要注意：这个操作只是在历史里新增一次"删除"记录，之前的 commit 里仍然能
+看到这个文件曾经存在过——如果内容涉及密钥，光 rm --cached 并不能把它从
+历史里彻底抹掉。
+
+[click] 下一步，我们回过头看看课前配置过的那些身份信息到底是怎么运作的——
+也就是 git config。
+-->
+
+---
+layout: section
+---
+
+# `git config`
+
+Local Git · 10
+
+<!--
+课前 Prerequisites 已经让你配置过 user.name 和 user.email。这一节把它放回
+Git 的整体模型里正式讲一遍：Git 本身还有一套配置系统。
+-->
+
+---
+
+# `--global` vs `--local`
+
+```bash
+git config --global user.name "Your Name"
+git config --local user.email "course@example.com"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+--global 影响这台机器上大多数仓库；--local 只对当前仓库生效，会覆盖 global
+</div>
+
+<!--
+user.name 和 user.email 会写进每一次 commit 的作者信息里——回头看看前面
+git log 的输出，Author 那一行就是从这里来的。local 配置保存在仓库自己的
+.git/config 里，不会 commit、不会推送。.gitignore 是团队共享规则应该提交；
+.git/config 是个人本地配置不会提交——这个对比能帮你理清哪些信息属于项目，
+哪些属于本地环境。
+-->
+
+---
+
+# 排查配置来源
+
+```bash
+git config --list --show-origin
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+显示每条配置具体来自哪个文件——排查"为什么我的配置不是我以为的那个"
+</div>
+
+<!--
+git config --get user.name / --get user.email 可以单独查某一项。
+--show-origin 后面那段路径在你自己电脑上会是真实的 ~/.gitconfig 位置。
+-->
+
+---
+
+# 几个顺手的配置
+
+```bash
+git config --global core.quotepath false
+git config --global core.excludesfile ~/.gitignore_global
+git config --global core.editor "vim"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+quotepath 让中文文件名显示更友好；excludesfile 指定个人的全局 ignore 规则
+</div>
+
+<!--
+core.editor 指定 Git 需要打开编辑器时用哪个程序——没配置的话会依次参考
+$GIT_EDITOR、$EDITOR、系统默认编辑器，很多人第一次遇到会卡在陌生的终端
+编辑器里出不来。初学阶段尽量用 -m 避开这个坑；万一进去了，vi/vim 默认模式
+按 Esc 再输入 :wq 保存退出，或 :cq 放弃这次 commit。
+
+~/.gitignore_global 是个人机器上的规则，不会进入任何仓库，专门处理本机
+系统或编辑器产生的文件，和仓库自己的 .gitignore 是两回事。pager、delta、
+difftool/mergetool、credential helper 这类效率配置先不展开，留到对应场景
+再讲。
+
+[click] 到这里，本地部分最核心的一批命令都学完了。下一步，我们要认识 Git
+真正的杀手锏——分支，也就是 git branch。
+-->
+
+---
+layout: section
+---
+
 # `git branch`
 
 Local Git · 11
