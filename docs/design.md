@@ -96,7 +96,7 @@ git config --global --list
 > **教学节奏说明**：下面 #1-#16 加上各处"补充"，实际授课不建议每个命令后面都单独停下来给学生练习，太碎。按内容自然的断点分成 6 个教学块，演示时块内一条线连贯讲下去，块与块之间才是完整的练习节点：
 >
 > - **A. 核心记录循环**：#1-#5（含"阶段性总结：Git 的三层模型"）
-> - **B. 查看与撤销**：#6（含补充 `git add -p`）、#7、#8（含补充 `git reset --hard`、`git reset HEAD <file>`）
+> - **B. 查看与撤销**：#6、#7、#8（含补充 `git reset --hard`、`git reset HEAD <file>`）
 > - **C. 仓库卫生**：#9（含补充 `git add -A`、`git rm --cached`）、#10
 > - **D. 分支基础**：#11、#12、#13
 > - **E. 合并与冲突**：#14（含补充 `git branch -D`、`git merge --no-ff`/`--ff-only`）、#15（含补充 `merge.conflictstyle`）
@@ -194,7 +194,7 @@ git add .
 
 `git add foobar.txt` 适合明确添加某个文件；`git add .` 会添加当前目录下的所有变化，使用方便但需要先 `git status` 确认没有把无关文件加进去。
 
-可以暂时不讲 `git add -A`、`git add -p`。其中 `git add -p` 很重要，但更适合后面讲“如何只提交一部分修改”时再展开。
+可以暂时不讲 `git add -A`。这一节重点是让学生理解 staging area 的作用，不要太早引入更多 `git add` 变体。
 
 #### 4. `git commit`
 
@@ -337,27 +337,6 @@ git diff --staged
 可以顺带提一句：`git diff --cached` 和 `git diff --staged` 基本等价，但课堂上统一使用 `--staged`，因为这个名字更贴近 staging area 的概念。
 
 暂时不讲复杂比较方式，例如 `git diff <commit>`、`git diff <commit1> <commit2>`、`git diff branchA..branchB`。这些适合等学生理解 commit hash 和 branch 之后再讲。
-
-`git diff` 让我们能看清"具体改了什么"，顺着这个话题可以再讲一个进阶但很实用的 `git add` 用法：`git add -p`，也叫 `git add --patch`。它可以让我们在同一个文件里，只把部分修改放进 staging area，而不是整份文件一起 add。
-
-```bash
-printf "line one\nline two\n" > notes.md
-git add notes.md
-git commit -m "Add notes file"
-
-printf "line one changed\nline two\nline three\n" > notes.md
-git diff
-git add -p notes.md
-```
-
-讲解重点：
-
-1. `git add -p` 会把改动拆成一个个 hunk，逐个询问是否要 stage。
-2. 常用按键：`y` 表示 stage 这个 hunk，`n` 表示跳过，`s` 表示把 hunk 拆得更细，`q` 表示退出。
-3. 这解决的是一个真实场景：一个文件里混了两类修改（例如一个 bug 修复 + 一段调试代码），只想先提交其中一部分。
-4. `git status` 和 `git diff --staged` 可以配合 `git add -p` 一起看，确认自己 stage 的内容符合预期。
-
-这个命令依赖学生已经理解 `git diff` 和 staging area 的关系，所以放在这里讲比放在 `git add` 第一次介绍时更合适。
 
 #### 7. `git restore`
 
@@ -1828,6 +1807,7 @@ git push
 10. `diff.algorithm = histogram`、`diff.colorMoved = default`：让 `git diff` 输出在移动代码块等场景下更易读，属于 diff 体验优化，不影响核心概念。
 11. pager、delta、VS Code difftool/mergetool：能显著改善查看 diff、log、冲突的体验，但依赖额外工具安装配置，适合作为教师个人工作流展示。
 12. git hooks：例如本地的 pre-commit、prepare-commit-msg、commit-msg，以及配合 remote 使用的 pre-push；横跨 local-git 和 Remote GitHub 两部分内容，适合单独作为一个专题展开。
+13. `git add -p` / `git add --patch`：用于 partial staging，把同一个文件里的修改拆成 hunk 后逐个选择是否加入 staging area。常用按键包括 `y`、`n`、`s`、`q`。它很实用，但需要学生已经理解 `git diff`、`git diff --staged`、staging area 和 commit 边界，适合作为“如何只提交一部分修改”的高级主题。
 
 ## 课后练习
 
