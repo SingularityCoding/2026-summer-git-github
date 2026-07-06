@@ -1100,3 +1100,460 @@ git branch -r、git branch -a——现在也先不提，等进入 Remote GitHub 
 [click] 下一步，我们要真正切换到 experiment 分支上，在上面提交一次新内容——
 这时候 main 和 experiment 才会第一次真正分叉，也就是 git switch。
 -->
+
+---
+layout: section
+---
+
+# `git switch`
+
+Local Git · 12
+
+<!--
+git branch experiment 只是创建了分支，并没有切换过去。git switch 才负责真正
+切换你当前所在的分支。
+-->
+
+---
+
+# 真正切换过去
+
+```bash
+git switch experiment
+git branch
+```
+
+<div v-click class="mt-4">
+
+```
+Switched to branch 'experiment'
+* experiment
+  main
+```
+
+</div>
+
+<!--
+从指针模型看，切换分支就是让 HEAD 指向另一个分支。此时两个分支仍然指向同一个
+commit，只是当前所在分支变了。
+-->
+
+---
+
+# 在 experiment 上提交
+
+```bash
+echo "experiment idea" >> foobar.txt
+git commit -am "Try experiment idea"
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+main 落在原地，experiment 往前走了一步
+</div>
+
+<!--
+当前在 experiment 分支上，所以新的 commit 会让 experiment 指针向前移动，main
+仍然停留在原来的位置。这就是分支的核心价值：可以在不影响主线的情况下做实验。
+-->
+
+---
+layout: image
+image: ./assets/diagrams/local-git/12-switch-diverge.svg
+backgroundSize: contain
+---
+
+<!--
+新的这个 commit 的父提交，就是 main 和 experiment 分开之前共同指向的那个
+commit——experiment 是从那个位置长出来的一条新线。
+-->
+
+---
+
+# 切回 main，观察变化
+
+```bash
+git switch main
+cat foobar.txt
+git log --oneline --graph --all
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+experiment idea 消失了——working directory 会跟随当前分支切换
+</div>
+
+<!--
+三件事：* 回到了 main；foobar.txt 里刚才在 experiment 上新增的内容消失了；
+git log --oneline 在 main 上看不到 experiment 的最新 commit，因为当前分支
+没有指向那条历史。--graph --all 能同时看到所有分支，很适合观察是否分叉。
+
+git switch -c feature-name 等价于先 branch 再 switch；git switch - 能切回
+上一个所在分支，类似 cd -，好用但不是主线重点。切换分支前最好先确认working
+directory 是 clean 的。
+
+[click] 下一步，我们要认识一个历史更久、职责更混合的命令——git checkout。
+-->
+
+---
+layout: section
+---
+
+# `git checkout`
+
+Local Git · 13
+
+<!--
+这一节不需要展开太多，因为前面已经分别讲过 git switch 和 git restore。这里
+的重点是认识 checkout：一个历史更久、职责更混合的命令，过去同时承担了"切换
+分支"和"恢复文件"这两件事。
+-->
+
+---
+
+# 旧式切换分支
+
+```bash
+git checkout experiment
+git checkout main
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+效果和 git switch experiment / git switch main 完全一样
+</div>
+
+<!--
+git checkout <branch> 是旧式切换分支命令，git checkout -b <branch> 对应
+git switch -c <branch>，原理和上一节一样，这里不重复演示。
+-->
+
+---
+
+# 旧式恢复文件
+
+```bash
+git checkout -- foobar.txt
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+效果和 git restore foobar.txt 一样
+</div>
+
+<!--
+你需要认识 checkout，因为很多老教程、博客、项目文档仍然大量在用它。但初学
+阶段不建议把它当主线命令，否则会把"切换分支"和"恢复文件"这两个本来清晰分开
+的概念又混回一起。git checkout <commit> 和 detached HEAD 这门课先不展开。
+
+[click] 下一步，我们要把 experiment 分支上的实验成果，真正合并回 main——
+也就是 git merge。
+-->
+
+---
+layout: section
+---
+
+# `git merge`
+
+Local Git · 14
+
+<!--
+experiment 分支上已经有了一次提交。现在要把这条分支上的成果，合回 main。
+merge 的方向很重要：git merge experiment 的意思是把 experiment 合入当前
+分支，所以必须先切到 main，再 merge experiment。
+-->
+
+---
+
+# Fast-forward merge
+
+```bash
+git switch main
+git merge experiment
+```
+
+<div v-click class="mt-4">
+
+```
+Updating 7471135..e54cb37
+Fast-forward
+ foobar.txt | 1 +
+ 1 file changed, 1 insertion(+)
+```
+
+</div>
+
+<!--
+Fast-forward 就是关键：因为 main 自从创建 experiment 之后没有产生任何新
+commit，Git 不需要真正"合并"两条不同的历史，只是把 main 这个指针直接往前挪
+到 experiment 指向的位置——没有产生额外的 merge commit。合并后 main 和
+experiment 指向同一个 commit。
+-->
+
+---
+layout: image
+image: ./assets/diagrams/local-git/14-merge-ff.svg
+backgroundSize: contain
+---
+
+<!--
+mermaid 用一个节点画出这个"汇合"，但因为是 fast-forward，Git 实际上不会
+创建这个 merge commit，main 只是指针直接跳过去。
+-->
+
+---
+
+# 删掉已经合并的分支
+
+```bash
+git branch -d experiment
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+删除分支不会删除 commit，只是删除这个名字——分支只是指针，不是复制了一份代码
+</div>
+
+<!--
+因为 experiment 已经合入 main，所以 -d 是安全的。如果分支还没合并，-d 会
+拒绝删除；这时候 -D（大写）会强制删除，哪怕提交还没合并到任何地方——-d 是
+"确认安全才删"，-D 是"我确定要删"。这一节先只讲 fast-forward。
+
+[click] 下一步，我们专门设计一个冲突场景，去理解为什么多人协作时需要处理
+合并冲突。
+-->
+
+---
+layout: section
+---
+
+# Merge conflict
+
+Local Git · 15
+
+<!--
+真实工作里冲突经常发生在多人协作、git pull、Pull Request 里，但第一次学
+最好先在本地构造一个冲突——状态可控、命令少。先说清楚一个观点：merge
+conflict 不是 GitHub 独有的问题，只要两条历史分支修改了同一段内容，Git
+就无法自动判断该保留哪一边；remote、GitHub 只是让多人更容易产生分叉。
+-->
+
+---
+
+# 两条分支，改了同一行
+
+```bash
+git switch -c conflict-a
+printf "hello from conflict-a\n..." > foobar.txt
+git commit -am "Update greeting on conflict branch"
+
+git switch main
+printf "hello from main\n..." > foobar.txt
+git commit -am "Update greeting on main"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+main 和 conflict-a 都改了 foobar.txt 的第一行，但改成了不一样的内容
+</div>
+
+<!--
+先从 clean 的 main 开始，创建一个会产生冲突的分支，改同一行；再回到 main，
+把同一行改成另一个内容。这样两条历史真正分叉，且修改了同一处内容。
+-->
+
+---
+
+# 冲突发生了
+
+```bash
+git merge conflict-a
+```
+
+<div v-click class="mt-4">
+
+```
+<<<<<<< HEAD
+hello from main
+=======
+hello from conflict-a
+>>>>>>> conflict-a
+```
+
+</div>
+
+<!--
+Git 不知道该保留哪一边，所以暂停 merge，让人来决定。git status 会显示
+unmerged paths，提示 both modified。HEAD 这一边表示当前分支（正在接收
+合并的 main）；======= 是分隔线；>>>>>>> conflict-a 这一边是被合并进来的
+分支。解决冲突不是删掉某一边，而是根据真实意图编辑成最终想要的内容。
+
+顺带一提 git config --global merge.conflictstyle zdiff3：会额外显示两边
+分叉之前的共同祖先内容（多一段 ||||||| base），对复杂冲突更容易看懂，属于
+效率优化，看时间决定是否演示。
+-->
+
+---
+
+# 解决冲突
+
+```bash
+git add foobar.txt
+git commit -m "Resolve greeting conflict"
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+git add 在这里的意思是：这个文件的冲突已经解决了
+</div>
+
+<!--
+步骤是：编辑文件、删除 conflict markers、保留最终想要的内容；git add
+告诉 Git 冲突已解决；git commit 完成这次 merge——这次真的产生了一个 merge
+commit，log --graph 上能看到分叉再汇合的形状，和 fast-forward 的直线完全
+不同。逃生命令 git merge --abort 能放弃这次 merge，回到合并前的状态。
+-->
+
+---
+layout: image
+image: ./assets/diagrams/local-git/15-merge-conflict.svg
+backgroundSize: contain
+---
+
+<!--
+两条分支改了同一行，merge 产生了真正的 merge commit——分叉再汇合的形状。
+-->
+
+---
+
+# `--no-ff`：强制产生 merge commit
+
+```bash
+git merge --no-ff feature-note
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+本来可以 fast-forward，但 --no-ff 强制留下一次"这里合并过"的记录
+</div>
+
+<!--
+这次 main 没有新的 commit，本来会是 fast-forward，但 --no-ff 强制 Git 创建
+一个 merge commit。好处是历史里能清楚看到"这里发生过一次分支合并"。一些
+团队的分支策略会统一要求 --no-ff，方便回溯每个 feature 分支的边界。
+-->
+
+---
+
+# `--ff-only`：只允许快进，否则拒绝
+
+```bash
+git merge --ff-only feature-two
+```
+
+<div v-click class="mt-4 text-lg opacity-80">
+如果 main 有新的、不在对方分支里的 commit，这条命令会直接失败
+</div>
+
+<!--
+适合希望保持线性历史、不想意外产生 merge commit 的场景，属于团队分支策略的
+一种选择。这两个参数不影响冲突本身的处理方式，只是决定"什么情况下产生 merge
+commit、以及是否允许 Git 自动决定"。
+
+[click] 下一步，我们把本地这一路学到的东西收个尾——认识 Git aliases，顺便
+补上一个之前刻意没提的高频简写：git commit -a。
+-->
+
+---
+layout: section
+---
+
+# Git aliases
+
+Local Git · 16
+
+<!--
+alias 就是通过 git config 配置出来的命令缩写。
+-->
+
+---
+
+# 配几个顺手的缩写
+
+```bash
+git config --global alias.st status
+git config --global alias.lg "log --oneline --graph --all"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+课堂讲解仍然优先用完整命令——避免没配置 alias 就跟不上
+</div>
+
+<!--
+alias 是个人效率工具，不是团队协作的必要条件。git lg 这类 alias 特别适合
+把长命令固定下来。不建议一开始配置太多，先熟悉原始命令，再逐步加自己真正
+高频用到的缩写。alias 存在于个人 Git 配置里，不会被 commit，也不会影响
+别人。删除用 git config --global --unset alias.st。
+-->
+
+---
+
+# 顺手补一个：`git commit -a`
+
+```bash
+echo "quick fix" >> foobar.txt
+git commit -a -m "Quick fix"
+```
+
+<div v-click class="mt-6 text-lg opacity-80">
+只处理已经被追踪、且有修改的文件——新文件仍然需要显式 git add
+</div>
+
+<!--
+前面讲 add 和 commit 时故意没提这个，为的是先让你扎实理解 staging area。
+-a 会自动把已追踪文件的修改先 add 再 commit，省了手动 add 这一步，但容易
+在没注意的情况下把不想提交的修改也一起提交进去。-a 不是必须掌握的技巧，
+add + commit 分开写永远是更清楚、更不容易出错的写法。
+
+[click] 本地 Git 最核心的一批内容，到这里就学完了。下一步，我们回顾一下
+从三层模型到四区域模型的这段旅程，然后正式进入 Remote GitHub。
+-->
+
+---
+layout: section
+---
+
+# 从三层模型到四区域模型
+
+<!--
+在正式进入 GitHub 之前，先回顾一次前面建立起来的本地三层模型：Working
+Directory、Staging Area、Local Repository。然后引入第四个区域：Remote
+Repository。
+-->
+
+---
+layout: image
+image: ./assets/diagrams/local-git/16-recap-four-areas.svg
+backgroundSize: contain
+---
+
+<!--
+git push 把本地 commit 同步到 remote repository；git fetch / git pull 从
+remote repository 获取别人或远程上的新变化。
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# remote 不等于 GitHub
+
+<div v-click class="text-lg opacity-70 mt-6">
+GitHub、GitLab、Gitea、公司内网服务器，甚至本机的 bare repository，都可以是 remote
+</div>
+
+<div v-click class="mt-12 pt-6 border-t border-main text-2xl">
+课堂接下来统一用 GitHub——最常见，也能自然承接 Issue、PR、Actions
+</div>
+
+<!--
+remote repository 指的是另一个 Git 仓库地址，不一定是 GitHub——这一点提
+一嘴就好，bare repo 不展开。
+
+[click] 到这里，本地 Git 的部分正式收尾。下一步，我们要把这些本地的历史，
+第一次真正同步到网络上——认识 GitHub。
+-->

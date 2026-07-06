@@ -1,0 +1,15 @@
+---
+title: 从三层模型到四区域模型
+---
+flowchart TD
+    RR["Remote Repository"]
+    LR["Local Repository"]
+    SA["Staging Area / Index"]
+    WD["Working Directory / Working Tree"]
+
+    LR -- "git push" --> RR
+    RR -- "git fetch / pull" --> LR
+    SA -- "git commit" --> LR
+    LR -- "checkout / reset" --> SA
+    WD -- "git add" --> SA
+    SA -- "git restore --staged / reset" --> WD

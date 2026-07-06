@@ -1,0 +1,11 @@
+---
+title: 两条分支改了同一行，merge 产生真正的 merge commit
+---
+gitGraph
+    commit id: "Try experiment idea"
+    branch conflict-a
+    commit id: "Update greeting on conflict branch"
+    checkout main
+    commit id: "Update greeting on main"
+    checkout main
+    merge conflict-a id: "Resolve greeting conflict"

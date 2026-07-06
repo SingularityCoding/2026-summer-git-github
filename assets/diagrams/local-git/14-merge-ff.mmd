@@ -1,0 +1,14 @@
+---
+title: "git merge experiment（fast-forward）— main 直接跳到 experiment 的位置"
+---
+gitGraph
+    commit id: "Add foobar file"
+    commit id: "Update foobar file"
+    commit id: "Add gitignore"
+    commit id: "Accidentally commit local-only file"
+    commit id: "Stop tracking local-only file"
+    branch experiment
+    checkout experiment
+    commit id: "Try experiment idea"
+    checkout main
+    merge experiment id: "main fast-forwards here — no real merge commit"

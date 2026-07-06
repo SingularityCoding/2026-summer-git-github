@@ -1,0 +1,13 @@
+---
+title: git switch experiment 后提交 — main 落在原地，experiment 往前走了一步
+---
+gitGraph
+    commit id: "Add foobar file"
+    commit id: "Update foobar file"
+    commit id: "Add gitignore"
+    commit id: "Accidentally commit local-only file"
+    commit id: "Stop tracking local-only file"
+    branch experiment
+    checkout experiment
+    commit id: "Try experiment idea"
+    checkout main
