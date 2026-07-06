@@ -20,6 +20,7 @@ The teaching narrative for a given project (e.g. all of `local-git`, or `hello-g
 - Each script only contains the commands *new* to its own topic — it does not repeat earlier setup.
 - A script picks up where the previous topic left off by `source`-ing its immediate predecessor at the top, e.g. `03-add.sh` sources `02-status.sh`, which sources `01-init.sh`. It never sources anything further back than one step — the chain carries state forward on its own.
 - The first script in a project's chain (e.g. `01-init.sh` for `local-git`) is the chain's head: it computes `REPO_ROOT` once via `${BASH_SOURCE[0]}`, exports `LANG=en_US.UTF-8` (matching the Prerequisites setup, so captured output is the English a student would actually see), `rm -rf`s the project directory, and (re)creates it. Every downstream script inherits those variables and that clean state for free through the `source` chain.
+- The chain head also sandboxes `$HOME` under `.scratch/home` (gitignored, wiped along with the project dir) and sets a stable course identity (`user.name`/`user.email`, `init.defaultBranch`) via `git config --global` against that sandbox. This means later topics that legitimately demo `--global` config changes or writes to `~`-relative dotfiles (e.g. `local-git/10-config.sh`'s `git config --global core.editor`, `~/.gitignore_global`) can run for real and get captured for real, without ever touching the actual machine running the script.
 - Because sourcing replays the full chain from scratch, running *any* script standalone — not just the head — regenerates the entire history deterministically. There's no separate "run all in order" driver and no risk of capturing a topic's output against stale or partially-updated state.
 - Never hardcode absolute paths. Path resolution always goes through `${BASH_SOURCE[0]}` of the current file, so scripts work regardless of the caller's cwd.
 - A script becomes a new chain head — its own `rm -rf` + `mkdir`, not a `source` of the previous topic — only when the curriculum itself deliberately switches projects (e.g. `remote-github/02-publish.sh` starting the fresh `hello-github` project instead of continuing in `playground`). Don't start a new chain head just because it's convenient; only when the lesson content requires a different repo.
@@ -30,6 +31,7 @@ The teaching narrative for a given project (e.g. all of `local-git`, or `hello-g
 - `pnpm dev` — start the Slidev dev server
 - `pnpm build` — build the static deck
 - `pnpm export` — export to PDF/PNG/PPTX
+- `tools/render-diagrams.sh` — render `assets/diagrams/**/*.mmd` to `.svg`. Requires `mmdc` (mermaid-cli) on `PATH`; install it with `brew install mermaid-cli` (not a pnpm dependency — pulling it in via `@mermaid-js/mermaid-cli`/puppeteer means a chromium download that doesn't work in every environment, so this is a machine-level prerequisite instead). The script just checks `command -v mmdc` and exits with an install hint if it's missing.
 
 ## Conventions
 
