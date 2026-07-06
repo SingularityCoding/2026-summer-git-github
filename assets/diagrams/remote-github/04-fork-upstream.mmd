@@ -1,0 +1,11 @@
+---
+title: fork 之后，本地 clone 有两个 remote
+---
+flowchart LR
+    T["SingularityCoding/first-contributions<br/>老师的原仓库"]
+    F["你的 fork<br/>your-username/first-contributions"]
+    L["本地 clone"]
+
+    T -- "Fork" --> F
+    L -- "origin" --> F
+    L -- "upstream" --> T
