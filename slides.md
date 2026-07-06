@@ -1,662 +1,237 @@
 ---
-# try also 'default' to start simple
 theme: seriph
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
 background: https://cover.sli.dev
-# some information about your slides (markdown enabled)
-title: Welcome to Slidev
+title: Git & GitHub
 info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
-# apply UnoCSS classes to the current slide
+  ## Git & GitHub
+  从命令行操作，到 Pull Request 协作。
 class: text-center
-# https://sli.dev/features/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable Comark Syntax: https://comark.dev/syntax/markdown
 comark: true
-# duration of the presentation
-duration: 35min
 ---
 
-# Welcome to Slidev
-
-Presentation slides for developers
+# Git & GitHub
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
-
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
-  </a>
+  <carbon:arrow-right class="inline-block text-2xl" />
 </div>
 
 <!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
+课程首页。后续每个 topic 的第一页用 layout: section 做分隔。
 -->
 
 ---
-transition: fade-out
+layout: section
 ---
 
-# What is Slidev?
+# 为什么需要 Git
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
-
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+Local Git · 00
 
 <!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
-
-<!--
-Here is another comment.
+在真正敲下第一条 Git 命令之前，先花几分钟想清楚一件事：Git 到底是用来干什么的，
+为什么我们不能就这么随便应付过去。
 -->
 
 ---
-transition: slide-up
-level: 2
+layout: statement
 ---
 
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
-
-## Keyboard Shortcuts
-
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
-```
-
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc text-sm minDepth="1" maxDepth="2" />
-
----
-layout: image-right
-image: https://cover.sli.dev
----
-
-# Code
-
-Use code snippets and get the highlighting directly, and even types hover!
-
-```ts [filename-example.ts] {all|4|6|6-7|9|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
-```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="342" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
-level: 2
----
-
-# Shiki Magic Move
-
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
-
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
-
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
-
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
-    }
-  }
-}
-```
-
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
-}
-```
-
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>`, `<BlueSky/>`, and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
+<div class="text-2xl leading-relaxed">
+你正在写一个小项目，今天改了不少代码。
 </div>
-<div>
 
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
+<div v-click class="text-2xl leading-relaxed mt-6">
+程序突然跑不起来了，但你已经记不清改过哪些地方。
 </div>
+
+<div v-click class="text-2xl leading-relaxed mt-6">
+想退回昨天能跑的版本，又想留住今天写的一部分东西。
+</div>
+
+<div v-click class="text-xl opacity-70 mt-10">
+两个人一起改同一份代码呢？谁改了什么、怎么合并？
 </div>
 
 <!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
+在动手之前，先花十秒钟想这个场景，让学生带着问题往下听。
 
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
+这些问题靠"手动复制文件夹"是解决不了的——project_final.zip、project_final_v2.zip、
+project_final_v2_真的最终版.zip 这种命名迟早会把自己绕晕。停顿一下，留时间让
+学生会心一笑（呼应首页那句 tagline）。
 -->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
-
----
-
-# Clicks Animations
-
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you press <kbd>space</kbd> or <kbd>right</kbd>, or click outside the slide on the right.
-
-```html
-<div v-click>This shows up when you trigger a click animation.</div>
-```
-
-</div>
-
-<p v-click>
-You can also add modifiers to change the animation:
-</p>
-
-<div class="grid gap-3 mt-4 text-sm" style="grid-template-columns: repeat(3, 1fr) 1.5fr 1fr">
-  <div v-after.up class="p-3 rounded border border-primary/20 bg-primary/10">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
-    <div>Slide from bottom</div>
-  </div>
-  <div v-click.fade-in class="p-3 rounded border border-primary/30 bg-primary/15">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade-in</div>
-    <div>Fade in</div>
-  </div>
-  <div v-click.fade class="p-3 rounded border border-primary/40 bg-primary/20">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
-    <div>Dim (0.5 opacity)</div>
-  </div>
-  <div v-click.fade.right.scale class="p-3 rounded border border-primary/50 bg-primary/25">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right.scale</div>
-    <div>Composed</div>
-  </div>
-  <div v-click.none class="p-3 rounded border border-primary/60 bg-primary/30">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.none</div>
-    <div>No transition</div>
-  </div>
-</div>
-
-<v-click>
-
-The <span v-mark.red="7"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="8">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div v-click mt-12>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
-</div>
-
----
-
-# Motions
-
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# $\LaTeX$
-
-$\LaTeX$ is supported out-of-box. Powered by [$\KaTeX$](https://katex.org/).
-
-<div h-3 />
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
-```
 
 ---
 layout: center
 class: text-center
 ---
 
-# Learn More
+# Git 要解决的
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+# 不是"保存文件"
 
-<PoweredBySlidev mt-10 />
+<div v-click class="text-2xl mt-8">
+而是记录项目随时间变化的<b>历史</b>（history）
+</div>
+
+<div v-click class="text-lg opacity-70 mt-6">
+看差异 · 保存阶段性成果 · 回到过去 · 支持多人协作
+</div>
+
+<!--
+从场景引出一句关键的话：我们需要一个专门管理代码变化的工具。这个工具真正要
+解决的核心问题，不是"保存文件"，而是记录项目随时间变化的历史——让我们随时能
+看差异、保存阶段性成果、回到过去的版本，并且支持多人协作。
+-->
+
+---
+
+# 版本控制走过的三个阶段
+
+<div v-click class="p-4 rounded border border-main mt-4">
+<b>手动复制文件</b>——project_final、project_final_v2……混乱、不可追踪、没法协作
+</div>
+
+<div v-click class="p-4 rounded border border-main mt-4">
+<b>集中式（centralized）</b>——CVS、SVN，依赖中心服务器 checkout / update / commit
+</div>
+
+<div v-click class="p-4 rounded border border-main mt-4">
+<b>分布式（distributed）</b>——Git，每个人本地都有完整历史，远程只用来同步协作
+</div>
+
+<!--
+[click] 最朴素的做法：每次改动前复制一份文件夹。问题很明显：谁改了什么、什么
+时候改的、为什么这么改，全靠脑子记，忘了就没了。
+
+[click] 集中式版本控制系统比"复制文件夹"靠谱太多了，但对中心服务器依赖较重
+——离线能力和分支体验都比较有限，连不上服务器基本就干不了活。
+
+[click] Git 走的就是分布式这条路：每个开发者本地都有一份完整的仓库历史，可以
+离线提交、离线查看日志、随时创建分支；远程仓库更多是用来同步和协作，而不是
+唯一的历史来源。讲到这里就够了，不需要展开 Git 内部是怎么实现的——现在没完全
+理解也没关系，后面动手敲命令会慢慢建立起真正的直觉。
+-->
+
+---
+layout: section
+---
+
+# `git init`
+
+Local Git · 01
+
+<!--
+好，工具都装好、身份也配置好了，上一节也聊清楚了为什么需要 Git。现在正式开始
+动手，这门课的第一个 Git 命令，就是 git init。
+
+Git 要管理一个项目的历史，第一步永远是先让它知道"从现在开始，这个目录归我管"
+——这正是 git init 要做的事。
+-->
+
+---
+
+# 动手写
+
+在 `playground` 目录里，让 Git 开始"盯上"这个目录：
+
+```bash
+mkdir playground
+cd playground
+git init
+ls -a
+```
+
+<div v-click class="mt-6">
+
+```
+Initialized empty Git repository in /path/to/your/playground/.git/
+
+.       ..      .git
+```
+
+</div>
+
+<!--
+课堂上不会直接在什么正经项目里操作，而是专门开一个 playground 目录，把它当成实验场。
+
+[click] 你自己电脑上跑出来的那行 "Initialized empty Git repository in ..."，
+路径部分肯定和我的不一样——那是你自己 playground 文件夹实际所在的位置，这是
+正常的，不用怀疑自己哪里操作错了。
+-->
+
+---
+
+# 这一步做了什么
+
+<div v-click class="mt-6 text-xl">
+把当前目录变成一个 Git repository（仓库）
+</div>
+
+<div v-click class="mt-6 text-xl">
+多出一个 <code>.git</code> 隐藏目录——仓库的一切都在里面
+</div>
+
+<div v-click class="mt-6 text-xl">
+不会自动保存文件，也不会自动创建 commit——只是打开了版本管理这个开关
+</div>
+
+<!--
+[click] git init 的作用很单纯：把当前目录变成一个 Git repository。就这一件事。
+
+[click] 这个 .git 目录保存了这个仓库未来所有的历史记录、配置信息、分支指针……
+可以说仓库的一切都在这里面。这一节只需要记住"很重要，千万别手贱删掉它"就够了，
+具体里面装了什么，后面讲到内部结构时再展开。
+
+[click] git init 不会自动帮你保存任何文件，也不会自动创建 commit。它只是给这个
+目录打开了"Git 版本管理"这个开关，仅此而已——后面的 git add、git commit 才是
+真正开始记录内容的动作。
+-->
+
+---
+
+# 两个小提醒
+
+<div v-click class="p-4 rounded border border-main mt-4">
+不要图省事在家目录 / 桌面根目录这类大目录里 <code>git init</code>——Git 会开始关心这个目录下的一切
+</div>
+
+<div v-click class="p-4 rounded border border-main mt-6">
+默认分支应该是 <code>main</code>（课前已配置 <code>init.defaultBranch</code>）；如果看到 <code>master</code>，补一句配置就好
+</div>
+
+<!--
+[click] 一旦执行 git init，Git 理论上会开始关心这个目录下的一切，很容易把一堆
+互不相关的文件混进同一个仓库的上下文里，后面清理起来很麻烦。养成习惯：想清楚
+"这次要管理的到底是哪个项目"，再在对应的目录里 git init。
+
+[click] 因为课前 Prerequisites 里已经统一配置过 init.defaultBranch main，理论
+上大家看到的默认分支都应该叫 main。如果个别学生看到 master，说明那一步课前配置
+漏做了，补一句 git config --global init.defaultBranch main 就行，不用纠结为
+什么会这样——纯粹是个历史遗留的命名问题，和 Git 的核心概念没关系。
+-->
+
+---
+
+# 顺带一提
+
+`git init <directory>` 可以直接创建并初始化目录，不用自己先 `mkdir`
+
+<div v-click class="mt-6 text-lg opacity-80">
+课堂上还是优先用 <code>mkdir && cd && git init</code> 三步走——更容易建立"在哪个目录操作，Git 就管哪个目录"的直觉
+</div>
+
+<div v-click class="mt-12 pt-6 border-t border-main text-2xl">
+下一步：学会读懂 Git 现在的状态 → <code>git status</code>
+</div>
+
+<!--
+git init my-project 可以直接创建并初始化 my-project 这个目录。这个用法记一下
+就行，课堂上我们还是优先用三步走的写法——这样能更直观地感受到"在哪个目录下执行
+命令，Git 就初始化的是哪个目录"，这个直觉后面会一直有用。
+
+[click] 下一步，我们要学会读懂 Git 现在到底是什么状态——也就是这门课最重要的
+一个命令：git status。
+-->
