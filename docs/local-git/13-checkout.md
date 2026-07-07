@@ -24,8 +24,18 @@ Switched to branch 'main'
 
 再看它和 `git restore` 的关系：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "temp edit" >> foobar.txt
+git checkout -- foobar.txt
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "temp edit"
 git checkout -- foobar.txt
 git status
 ```

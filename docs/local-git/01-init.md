@@ -8,11 +8,22 @@ Git 要管理一个项目的历史，第一步永远是先让它知道"从现在
 
 课堂上不会直接在什么正经项目里操作，而是专门开一个 `playground` 目录，把它当成实验场：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 mkdir playground
 cd playground
 git init
 ls -a
+```
+
+Windows PowerShell:
+
+```powershell
+mkdir playground
+cd playground
+git init
+Get-ChildItem -Force
 ```
 
 在我这边实际跑出来是这样的：
@@ -40,6 +51,6 @@ $ ls -a
 
 ## 顺带一提
 
-`git init` 其实还可以带一个目录参数，比如 `git init my-project` 可以直接创建并初始化 `my-project` 这个目录，不用自己先 `mkdir`。这个用法记一下就行，课堂上我们还是优先用 `mkdir playground && cd playground && git init` 这个"三步走"的写法——这样你能更直观地感受到"在哪个目录下执行命令，Git 就初始化的是哪个目录"，这个直觉后面会一直有用。
+`git init` 其实还可以带一个目录参数，比如 `git init my-project` 可以直接创建并初始化 `my-project` 这个目录，不用自己先 `mkdir`。这个用法记一下就行，课堂上我们还是优先按 `mkdir playground`、`cd playground`、`git init` 这个"三步走"来写——这样你能更直观地感受到"在哪个目录下执行命令，Git 就初始化的是哪个目录"，这个直觉后面会一直有用。
 
 下一步，我们要学会读懂 Git 现在到底是什么状态——也就是这门课最重要的一个命令：`git status`。

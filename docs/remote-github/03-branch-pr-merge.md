@@ -24,8 +24,26 @@ Switched to a new branch 'improve-readme'
 
 ## 在分支上修改、提交、push
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 printf '\n## Development\n\nNotes on how this project is organized.\n' >> README.md
+git status
+git diff
+git add README.md
+git commit -m "Add development notes"
+git push -u origin improve-readme
+```
+
+Windows PowerShell:
+
+```powershell
+@'
+
+## Development
+
+Notes on how this project is organized.
+'@ | Add-Content -Path README.md
 git status
 git diff
 git add README.md

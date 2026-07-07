@@ -4,9 +4,19 @@
 
 先制造一些不应该提交的文件：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "debug log" > debug.log
 echo "SECRET_KEY=dev-secret" > .env
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path debug.log -Value "debug log"
+Set-Content -Path .env -Value "SECRET_KEY=dev-secret"
 git status
 ```
 
@@ -24,9 +34,19 @@ nothing added to commit but untracked files present (use "git add" to track)
 
 创建 `.gitignore` 来解决这个问题：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "*.log" > .gitignore
 echo ".env" >> .gitignore
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path .gitignore -Value "*.log"
+Add-Content -Path .gitignore -Value ".env"
 git status
 ```
 
@@ -83,9 +103,21 @@ nothing to commit, working tree clean
 
 先看 `git add -A`：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "content" > extra.txt
 rm foobar.txt
+git status
+git add -A
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path extra.txt -Value "content"
+Remove-Item -Path foobar.txt
 git status
 git add -A
 git status
@@ -118,8 +150,18 @@ Changes to be committed:
 
 再讲 `git rm --cached`，用来处理"文件已经被 commit，现在想让 Git 不再追踪它"这种情况。先制造这个场景——正常提交一个文件（这一步还没想起来要 ignore 它）：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "some local content" > local-only.txt
+git add local-only.txt
+git commit -m "Accidentally commit local-only file"
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path local-only.txt -Value "some local content"
 git add local-only.txt
 git commit -m "Accidentally commit local-only file"
 ```
@@ -132,8 +174,20 @@ git commit -m "Accidentally commit local-only file"
 
 现在意识到这个文件其实是本地专属内容，不该进仓库，于是补上 `.gitignore` 规则，并用 `git rm --cached` 真正让 Git 停止追踪它：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "local-only.txt" >> .gitignore
+git rm --cached local-only.txt
+git add .gitignore
+git status
+git commit -m "Stop tracking local-only file"
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path .gitignore -Value "local-only.txt"
 git rm --cached local-only.txt
 git add .gitignore
 git status

@@ -4,8 +4,18 @@
 
 先制造一个已经被 Git 追踪的文件的修改：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "third line" >> foobar.txt
+git status
+git diff
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "third line"
 git status
 git diff
 ```

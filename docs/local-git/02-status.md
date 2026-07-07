@@ -18,8 +18,17 @@ nothing to commit (create/copy files and use "git add" to track)
 
 现在造一个文件出来，再看一次：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "hello git" > foobar.txt
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path foobar.txt -Value "hello git"
 git status
 ```
 

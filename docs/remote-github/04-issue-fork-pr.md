@@ -57,9 +57,23 @@ git remote -v
 
 ## 创建分支、修改、push 到自己的 fork
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git switch -c add-<your-username>
 printf '- <your-username>\n' >> CONTRIBUTORS.md
+git status
+git diff
+git add CONTRIBUTORS.md
+git commit -m "Add <your-username> to contributors"
+git push -u origin add-<your-username>
+```
+
+Windows PowerShell:
+
+```powershell
+git switch -c add-<your-username>
+Add-Content -Path CONTRIBUTORS.md -Value "- <your-username>"
 git status
 git diff
 git add CONTRIBUTORS.md

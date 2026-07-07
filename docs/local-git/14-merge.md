@@ -26,10 +26,21 @@ nothing to commit, working tree clean
 
 执行合并：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git merge experiment
 git status
 cat foobar.txt
+git log --oneline --graph --all
+```
+
+Windows PowerShell:
+
+```powershell
+git merge experiment
+git status
+Get-Content -Path foobar.txt
 git log --oneline --graph --all
 ```
 

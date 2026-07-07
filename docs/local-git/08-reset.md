@@ -4,8 +4,19 @@
 
 先制造一个待会儿要撤销的 commit：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "bad experiment" >> foobar.txt
+git add foobar.txt
+git commit -m "Bad experiment"
+git log --oneline
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "bad experiment"
 git add foobar.txt
 git commit -m "Bad experiment"
 git log --oneline
@@ -86,6 +97,8 @@ git reset HEAD~1
 
 `--soft` 和默认的 `--mixed` 都见过之后，补上第三种、也是最危险的一种：`--hard`。
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "another bad experiment" >> foobar.txt
 git add foobar.txt
@@ -96,6 +109,20 @@ git reset --hard HEAD~1
 git status
 git log --oneline
 cat foobar.txt
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "another bad experiment"
+git add foobar.txt
+git commit -m "Another bad experiment"
+git log --oneline
+
+git reset --hard HEAD~1
+git status
+git log --oneline
+Get-Content -Path foobar.txt
 ```
 
 ```

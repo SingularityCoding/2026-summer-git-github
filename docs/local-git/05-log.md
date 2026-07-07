@@ -23,8 +23,20 @@ Date:   Mon Jul 6 22:40:55 2026 +0800
 
 为了让 `git log` 更有意义，马上制造第二次 commit：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "second line" >> foobar.txt
+git status
+git add foobar.txt
+git commit -m "Update foobar file"
+git log
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "second line"
 git status
 git add foobar.txt
 git commit -m "Update foobar file"

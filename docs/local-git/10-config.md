@@ -99,9 +99,18 @@ git config --global core.editor "vim"
 
 全局 ignore 可以这样用：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo ".DS_Store" >> ~/.gitignore_global
 echo ".idea/" >> ~/.gitignore_global
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path ~/.gitignore_global -Value ".DS_Store"
+Add-Content -Path ~/.gitignore_global -Value ".idea/"
 ```
 
 要把这个和仓库自己的 `.gitignore` 区分开：`.gitignore` 放在仓库里，应该提交，是团队共享规则；`~/.gitignore_global` 是你自己机器上的规则，不会进入任何仓库，专门用来处理本机系统或编辑器产生的文件。

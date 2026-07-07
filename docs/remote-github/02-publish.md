@@ -4,6 +4,8 @@
 
 ## 先在本地把项目建起来
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 mkdir hello-github
 cd hello-github
@@ -11,6 +13,34 @@ cd hello-github
 printf 'def greet(name):\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("GitHub"))\n' > hello.py
 printf '# hello-github\n\nA tiny Python project for learning Git and GitHub.\n' > README.md
 printf '__pycache__/\n*.pyc\n' > .gitignore
+
+python hello.py
+```
+
+Windows PowerShell:
+
+```powershell
+mkdir hello-github
+cd hello-github
+
+@'
+def greet(name):
+    return f"Hello, {name}!"
+
+if __name__ == "__main__":
+    print(greet("GitHub"))
+'@ | Set-Content -Path hello.py
+
+@'
+# hello-github
+
+A tiny Python project for learning Git and GitHub.
+'@ | Set-Content -Path README.md
+
+@'
+__pycache__/
+*.pyc
+'@ | Set-Content -Path .gitignore
 
 python hello.py
 ```
@@ -106,8 +136,26 @@ gh auth setup-git
 
 ## 日常流程：改一点东西，push
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 printf '\n## Usage\n\nRun `python hello.py`.\n' >> README.md
+git status
+git diff
+git add README.md
+git commit -m "Document usage"
+git push
+```
+
+Windows PowerShell:
+
+```powershell
+@'
+
+## Usage
+
+Run `python hello.py`.
+'@ | Add-Content -Path README.md
 git status
 git diff
 git add README.md

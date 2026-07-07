@@ -24,8 +24,19 @@ nothing to commit, working tree clean
 
 接着在 `experiment` 分支上做一次提交：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "experiment idea" >> foobar.txt
+git add foobar.txt
+git commit -m "Try experiment idea"
+git log --oneline
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "experiment idea"
 git add foobar.txt
 git commit -m "Try experiment idea"
 git log --oneline
@@ -51,10 +62,21 @@ git log --oneline
 
 再切回 `main`，观察内容和历史的变化：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git switch main
 git branch
 cat foobar.txt
+git log --oneline
+```
+
+Windows PowerShell:
+
+```powershell
+git switch main
+git branch
+Get-Content -Path foobar.txt
 git log --oneline
 ```
 

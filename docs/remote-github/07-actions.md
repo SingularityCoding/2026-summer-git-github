@@ -23,8 +23,24 @@ event -> workflow -> job -> step -> command/action
 
 继续用前面的 `hello-github` 项目：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 printf 'from hello import greet\n\n\ndef test_greet():\n    assert greet("GitHub") == "Hello, GitHub!"\n' > test_hello.py
+python -m pip install pytest
+python -m pytest
+```
+
+Windows PowerShell:
+
+```powershell
+@'
+from hello import greet
+
+
+def test_greet():
+    assert greet("GitHub") == "Hello, GitHub!"
+'@ | Set-Content -Path test_hello.py
 python -m pip install pytest
 python -m pytest
 ```
@@ -51,8 +67,16 @@ git commit -m "Add greeting test"
 
 ## 创建 workflow
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 mkdir -p .github/workflows
+```
+
+Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force -Path .github/workflows | Out-Null
 ```
 
 `.github/workflows/ci.yml`：
@@ -84,7 +108,7 @@ jobs:
 - `on` 定义触发条件：push 到 `main` 或创建/更新 PR。
 - `jobs.test` 定义一个名为 `test` 的 job；`runs-on: ubuntu-latest` 表示在 GitHub 提供的 Ubuntu runner 上运行。
 - `actions/checkout@v4` 把仓库代码 checkout 到 runner；`actions/setup-python@v5` 安装指定 Python 版本。
-- `run` 执行普通 shell 命令，和你在本地终端里敲的是同一回事。
+- `run` 在 GitHub runner 的默认 shell 里执行命令，概念上类似你在本地终端里敲命令，但真实运行环境是 GitHub 提供的临时 Ubuntu 机器。
 
 提交并 push：
 
@@ -117,8 +141,18 @@ Actions tab 里出现了这次 CI run；如果是走 PR 流程，PR 页面也会
 
 把 `test_hello.py` 里的期望字符串改错：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
-sed -i '' 's/Hello, GitHub!/Hello, World!/' test_hello.py
+python -c 'from pathlib import Path; p = Path("test_hello.py"); p.write_text(p.read_text().replace("Hello, GitHub!", "Hello, World!"))'
+git commit -am "Break the test on purpose"
+git push
+```
+
+Windows PowerShell:
+
+```powershell
+python -c 'from pathlib import Path; p = Path("test_hello.py"); p.write_text(p.read_text().replace("Hello, GitHub!", "Hello, World!"))'
 git commit -am "Break the test on purpose"
 git push
 ```
@@ -157,8 +191,18 @@ test_hello.py:5: AssertionError
 
 改回来，让仓库恢复绿色：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
-sed -i '' 's/Hello, World!/Hello, GitHub!/' test_hello.py
+python -c 'from pathlib import Path; p = Path("test_hello.py"); p.write_text(p.read_text().replace("Hello, World!", "Hello, GitHub!"))'
+git commit -am "Fix the test"
+git push
+```
+
+Windows PowerShell:
+
+```powershell
+python -c 'from pathlib import Path; p = Path("test_hello.py"); p.write_text(p.read_text().replace("Hello, World!", "Hello, GitHub!"))'
 git commit -am "Fix the test"
 git push
 ```

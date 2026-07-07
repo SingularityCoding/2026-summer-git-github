@@ -8,10 +8,22 @@
 
 先从 clean 的 `main` 开始，创建一个会产生冲突的分支：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git switch main
 git switch -c conflict-a
 printf "hello from conflict-a\nsecond line\nexperiment idea\n" > foobar.txt
+git add foobar.txt
+git commit -m "Update greeting on conflict branch"
+```
+
+Windows PowerShell:
+
+```powershell
+git switch main
+git switch -c conflict-a
+Set-Content -Path foobar.txt -Value @("hello from conflict-a", "second line", "experiment idea")
 git add foobar.txt
 git commit -m "Update greeting on conflict branch"
 ```
@@ -24,9 +36,20 @@ Switched to a new branch 'conflict-a'
 
 然后回到 `main`，修改同一行，但改成另一个内容：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git switch main
 printf "hello from main\nsecond line\nexperiment idea\n" > foobar.txt
+git add foobar.txt
+git commit -m "Update greeting on main"
+```
+
+Windows PowerShell:
+
+```powershell
+git switch main
+Set-Content -Path foobar.txt -Value @("hello from main", "second line", "experiment idea")
 git add foobar.txt
 git commit -m "Update greeting on main"
 ```
@@ -39,10 +62,20 @@ Switched to branch 'main'
 
 现在把 `conflict-a` 合入 `main`：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git merge conflict-a
 git status
 cat foobar.txt
+```
+
+Windows PowerShell:
+
+```powershell
+git merge conflict-a
+git status
+Get-Content -Path foobar.txt
 ```
 
 ```
@@ -100,8 +133,20 @@ hello from conflict-a
 
 把文件改成一个明确的最终版本：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 printf "hello from main and conflict branch\nsecond line\nexperiment idea\n" > foobar.txt
+git add foobar.txt
+git status
+git commit -m "Resolve greeting conflict"
+git log --oneline --graph --all
+```
+
+Windows PowerShell:
+
+```powershell
+Set-Content -Path foobar.txt -Value @("hello from main and conflict branch", "second line", "experiment idea")
 git add foobar.txt
 git status
 git commit -m "Resolve greeting conflict"
@@ -152,9 +197,24 @@ git merge --abort
 
 先看 `--no-ff`：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git switch -c feature-note
 echo "feature note" >> foobar.txt
+git add foobar.txt
+git commit -m "Add feature note"
+
+git switch main
+git merge --no-ff feature-note
+git log --oneline --graph --all
+```
+
+Windows PowerShell:
+
+```powershell
+git switch -c feature-note
+Add-Content -Path foobar.txt -Value "feature note"
 git add foobar.txt
 git commit -m "Add feature note"
 
@@ -187,10 +247,26 @@ Merge made by the 'ort' strategy.
 
 再看 `--ff-only`：
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 git branch -d feature-note
 git switch -c feature-two
 echo "feature two" >> foobar.txt
+git add foobar.txt
+git commit -m "Add feature two"
+
+git switch main
+git merge --ff-only feature-two
+git log --oneline --graph --all
+```
+
+Windows PowerShell:
+
+```powershell
+git branch -d feature-note
+git switch -c feature-two
+Add-Content -Path foobar.txt -Value "feature two"
 git add foobar.txt
 git commit -m "Add feature two"
 

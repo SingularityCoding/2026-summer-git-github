@@ -55,8 +55,19 @@ git config --global --unset alias.st
 
 前面讲 `git add` 和 `git commit` 的时候，故意没提这个——为的是先让你扎实理解 staging area。现在三层模型和 alias 都讲完了，可以补上这个高频简写了。
 
+macOS + Windows Git Bash（Linux 可自行参考）:
+
 ```bash
 echo "quick fix" >> foobar.txt
+git status
+git commit -a -m "Quick fix"
+git status
+```
+
+Windows PowerShell:
+
+```powershell
+Add-Content -Path foobar.txt -Value "quick fix"
 git status
 git commit -a -m "Quick fix"
 git status
